@@ -2,7 +2,7 @@ import socket
 import select
 import sys
 
-IP = '127.0.0.1'
+IP = 'server'
 PORT = 3000
 SIZE = 2048
 
