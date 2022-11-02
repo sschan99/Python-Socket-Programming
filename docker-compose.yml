@@ -8,7 +8,7 @@ services:
     deploy:
       mode: global
 
-  cilent:
+  cilent-seungchan:
     depends_on:
       - server
     image: seungchan1219/python-socket:client
@@ -16,4 +16,16 @@ services:
     tty: true
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 1
+    command: /bin/ash -c "echo -e \"hi!\\n/wait\\nI'm Seungchan\\n/wait\" | python client_socket.py"
+
+  cilent-minsu:
+    depends_on:
+      - server
+    image: seungchan1219/python-socket:client
+    stdin_open: true
+    tty: true
+    deploy:
+      mode: replicated
+      replicas: 1
+    command: /bin/ash -c "echo -e \"/wait\\nhello!\\n/wait\\nI'm Minsu\" | python client_socket.py"

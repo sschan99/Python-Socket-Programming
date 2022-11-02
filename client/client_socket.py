@@ -1,6 +1,7 @@
 import socket
 import select
 import sys
+import time
 
 IP = 'server'
 PORT = 3000
@@ -8,9 +9,10 @@ SIZE = 2048
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((IP, PORT))
+time.sleep(1)
 
 while True:
-    socket_list = [sys.stdin, client_socket]
+    socket_list = [client_socket, sys.stdin]
     read_socket, write_socket, error_socket = select.select(socket_list, [], [])
 
     for socket in read_socket:
@@ -19,6 +21,15 @@ while True:
             print(message.decode('utf-8'))
         else:  # stdin
             message = sys.stdin.readline().rstrip()
+
+            if message == '':
+                exit()
+            if message == '/wait':  # wait for socket receive
+                message = client_socket.recv(SIZE)
+                print(message.decode('utf-8'))
+                time.sleep(1)
+                continue
+            
             client_socket.send(message.encode())
-            UP = '\x1B[1A'
-            print(f'{UP}<You> {message}')
+            print('<You> ' + message)
+            time.sleep(1)
