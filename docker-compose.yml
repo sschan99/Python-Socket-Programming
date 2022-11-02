@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   server:
-    image: seungchan1219/python-socket:server
+    image: seungchan1219/python-server-socket
     stdin_open: true
     tty: true
     deploy:
@@ -11,7 +11,7 @@ services:
   cilent-seungchan:
     depends_on:
       - server
-    image: seungchan1219/python-socket:client
+    image: seungchan1219/python-client-socket
     stdin_open: true
     tty: true
     deploy:
@@ -22,7 +22,7 @@ services:
   cilent-minsu:
     depends_on:
       - server
-    image: seungchan1219/python-socket:client
+    image: seungchan1219/python-client-socket
     stdin_open: true
     tty: true
     deploy:
