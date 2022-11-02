@@ -9,13 +9,15 @@ SIZE = 2048
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect((IP, PORT))
-time.sleep(1)
+message = client_socket.recv(SIZE)
+print(message.decode('utf-8'))
 
 while True:
     socket_list = [client_socket, sys.stdin]
     read_socket, write_socket, error_socket = select.select(socket_list, [], [])
 
     for socket in read_socket:
+        time.sleep(1)  # This line only need for testing docker compose
         if socket == client_socket:
             message = socket.recv(SIZE)
             print(message.decode('utf-8'))
@@ -27,9 +29,7 @@ while True:
             if message == '/wait':  # wait for socket receive
                 message = client_socket.recv(SIZE)
                 print(message.decode('utf-8'))
-                time.sleep(1)
                 continue
             
             client_socket.send(message.encode())
             print('<You> ' + message)
-            time.sleep(1)
