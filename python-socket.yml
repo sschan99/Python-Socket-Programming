@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server
+  labels:
+    app: socket-chat
+spec:
+  selector:
+    matchLabels:
+      app: socket-chat
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: socket-chat
+        tier: backend
+    spec:
+      containers:
+        - image: seungchan1219/python-server-socket
+          name: server-socket
+          ports:
+            - containerPort: 3000
+              name: server-socket
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server
+  labels:
+    app: socket-chat
+spec:
+  ports:
+    - port: 3000
+  selector:
+    app: socket-chat
+    tier: backend
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client
+  labels:
+    app: socket-chat
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: socket-chat
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: socket-chat
+        tier: frontend
+    spec:
+      containers:
+        - image: seungchan1219/python-client-socket
+          name: client-socket
+          stdin: true
+          tty: true
+          
